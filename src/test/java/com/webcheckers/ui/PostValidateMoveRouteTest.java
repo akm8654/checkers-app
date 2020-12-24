@@ -55,6 +55,9 @@ public class PostValidateMoveRouteTest
   //friendly objects
   private int endRow;
   private int endCol;
+  private int startRow;
+  private int startCol;
+  private Space startSpace;
   private Space endSpace;
   Gson gson = new Gson();
 
@@ -128,12 +131,12 @@ public class PostValidateMoveRouteTest
 
     when(manager.getLocalGame(player.getUsername())).thenReturn(null);
     when(manager.makeClientSideGame(GAMEID, player.getUsername())).thenReturn(game);
+    System.out.println(game);
     endRow = 4;
     endCol = 1;
     endSpace = new Space(endRow, endCol, true);
     when(board.getSpaceAt(endRow, endCol)).thenReturn(endSpace);
-    assertEquals(gson.toJson(info(VALID)), CuT.handle(request,
-            response));
+    assertEquals(gson.toJson(info(VALID)), CuT.handle(request,response));
   }
 
   @Test
@@ -214,5 +217,4 @@ public class PostValidateMoveRouteTest
     assertEquals(gson.toJson(error(INVALID_BACKWARDS)), CuT.handle(request,
             response));
   }
-
 }

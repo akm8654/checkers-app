@@ -1,16 +1,14 @@
 package com.webcheckers.ui;
 
-import static spark.Spark.*;
+import com.webcheckers.application.GameManager;
+import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.application.ReplayManager;
+import spark.TemplateEngine;
 
 import java.util.Objects;
 import java.util.logging.Logger;
 
-import com.google.gson.Gson;
-
-import com.webcheckers.application.GameManager;
-import com.webcheckers.application.PlayerLobby;
-import com.webcheckers.model.Player;
-import spark.TemplateEngine;
+import static spark.Spark.*;
 
 
 /**
@@ -66,8 +64,17 @@ public class WebServer
   public static final String CHECK_TURN_URL = "/checkTurn";
   public static final String SUBMIT_TURN_URL = "/submitTurn";
   public static final String BACKUP_MOVE_URL = "/backupMove";
+  public static final String RESIGN_GAME_URL = "/resignGame";
   public static final String SPECTATOR_GAME_URL = "/spectator/game";
   public static final String SPECTATOR_CHECK_TURN_URL = "/spectator/checkTurn";
+  public static final String SIGNOUT_URL = "/signout";
+  public static final String CHANGE_THEME_URL = "/changeTheme";
+  public static final String REPLAY_URL = "/replay";
+  public static final String REPLAY_GAME = "/replay/game";
+  public static final String NEXT_TURN = "/replay/nextTurn";
+  public static final String PREVIOUS_TURN = "/replay/previousTurn";
+  public static final String REPLAY_STOP_WATCHING = "/replay/stopWatching";
+  public static final String EXIT_SPECTATOR_GAME_URL = "/spectator/stopWatching";
 
   //
   // Attributes
@@ -76,23 +83,22 @@ public class WebServer
   private final TemplateEngine templateEngine;
   private final PlayerLobby playerLobby;
   private final GameManager gameManager;
+  private final ReplayManager rManager = new ReplayManager();
 
   /**
    * The constructor for the Web Server.
    *
    * @param templateEngine The default {@link TemplateEngine} to render page-level HTML views.
-   * @param gson           The Google JSON parser object used to render Ajax responses.
    * @throws NullPointerException If any of the parameters are {@code null}.
    */
-  public WebServer(final TemplateEngine templateEngine, final Gson gson)
+  public WebServer(final TemplateEngine templateEngine)
   {
     // validation
     Objects.requireNonNull(templateEngine, "templateEngine must not be null");
-    Objects.requireNonNull(gson, "gson must not be null");
     //
     this.templateEngine = templateEngine;
     playerLobby = new PlayerLobby();
-    gameManager = new GameManager(playerLobby);
+    gameManager = new GameManager(playerLobby, rManager);
   }
 
   //
@@ -147,8 +153,8 @@ public class WebServer
     //// Create separate Route classes to handle each route; this keeps your
     //// code clean; using small classes.
     // Shows the Checkers game Home page.
-    get(HOME_URL, new GetHomeRoute(templateEngine, playerLobby, gameManager));
-    //Shows signin page
+    get(HOME_URL, new GetHomeRoute(templateEngine, playerLobby, gameManager,
+            rManager));
     get(SIGNIN_URL, new GetSignInRoute(templateEngine));
     post(SIGNIN_URL, new PostSignInRoute(templateEngine, playerLobby));
     post(REQUEST_GAME_URL, new PostRequestGameRoute());
@@ -156,11 +162,19 @@ public class WebServer
     get(GAME_URL, new GetGameRoute(templateEngine));
     post(CHECK_TURN_URL, new PostCheckTurnRoute());
     post(VALIDATE_MOVE_URL, new PostValidateMoveRoute());
-    post(SUBMIT_TURN_URL, new PostSubmitTurnRoute());
+    post(SUBMIT_TURN_URL, new PostSubmitTurnRoute(rManager));
     post(BACKUP_MOVE_URL, new PostBackupMoveRoute());
+    post(RESIGN_GAME_URL, new PostResignRoute());
     get(SPECTATOR_GAME_URL, new GetSpectatorGameRoute(templateEngine));
     post(SPECTATOR_CHECK_TURN_URL, new PostSpectatorCheckTurnRoute());
+    post(SIGNOUT_URL, new PostSignOutRoute(templateEngine, playerLobby));
+    post(CHANGE_THEME_URL, new PostChangeThemeRoute(rManager));
+    get(REPLAY_URL, new GetReplayRoute(templateEngine, rManager));
+    get(REPLAY_GAME, new GetReplayGameRoute(templateEngine, rManager));
+    post(PREVIOUS_TURN, new PostReplayPreviousTurnRoute(rManager));
+    post(NEXT_TURN, new PostReplayNextTurnRoute(rManager));
+    get(REPLAY_STOP_WATCHING, new PostReplayStopWatchingRoute(rManager));
+    get(EXIT_SPECTATOR_GAME_URL, new GetStopWatchingRoute());
     LOG.config("WebServer is initialized.");
   }
-
 }

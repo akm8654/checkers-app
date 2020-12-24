@@ -10,13 +10,18 @@ import spark.Route;
 import spark.Session;
 
 import static com.webcheckers.util.Message.info;
-import static spark.Spark.halt;
 
+/**
+ * Determines whether the game the spectator is watching has changed or not.
+ * Then returns the value in a gson object using the message info whether it
+ * is true (another turn) or false(the same turn)
+ *
+ * @author Austin Miller 'akm8654'
+ */
 public class PostSpectatorCheckTurnRoute implements Route
 {
-
   @Override
-  public Object handle(Request request, Response response) throws Exception
+  public Object handle(Request request, Response response)
   {
     final Session httpSession = request.session();
     final Player spectator = httpSession.attribute(GetHomeRoute.PLAYER_KEY);

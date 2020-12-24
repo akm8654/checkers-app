@@ -18,6 +18,11 @@ define(function (require) {
     _gameState: null,
 
     /**
+     * The current theme in the game.
+     */
+    theme: null,
+
+    /**
      * Set the state of the Game View.  This should only be called once after
      * the GameView DOM has been fully loaded.  See main.js
      *
@@ -34,6 +39,10 @@ define(function (require) {
      */
     getGameID: function() {
       return AjaxUtils._gameState.getGameID();
+    },
+
+    getTheme: function() {
+      localStorage.getItem('theme');
     },
 
     /**
@@ -153,8 +162,12 @@ define(function (require) {
     const params = { };
     // add gameID if available
     const gameID = AjaxUtils.getGameID();
+    const theme = AjaxUtils.getTheme();
     if (LangUtils.exists(gameID)) {
       params.gameID = gameID;
+    }
+    if (LangUtils.exists(theme)) {
+      params.theme = theme;
     }
     // add action data if available
     if (LangUtils.exists(actionData)) {

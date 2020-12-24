@@ -4,6 +4,12 @@ import java.util.*;
 
 import static com.webcheckers.model.Board.DIMENSIONS;
 
+/**
+ * A view component for the board that allows flipping without changing any
+ * board contents.
+ *
+ * @author Austin Miller 'akm8654'
+ */
 public class BoardView implements Iterable<Row>
 {
   // The board itself

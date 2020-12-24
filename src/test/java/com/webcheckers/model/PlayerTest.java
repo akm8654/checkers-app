@@ -2,6 +2,7 @@ package com.webcheckers.model;
 
 import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
+import com.webcheckers.application.ReplayManager;
 import com.webcheckers.model.Player.UsernameResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * The unit test suite for the {@link Player} component.
  *
  * @author Austin Miller 'akm8654'
+ * @author Mikayla Wishart 'mcw7246'
  */
 @Tag("Model-tier")
 public class PlayerTest
@@ -21,12 +23,14 @@ public class PlayerTest
   private static final String GOOD_NAME = "player1";
   private static final String NO_NUM = "player";
   private static final String TOO_SHORT = "p1";
+  private static final String CONTAINS_SPACE = "pla yer";
   private static final String TOO_LONG = "itsybitsysp1derwentupthewaterspout";
   private static final String HAS_SPACE = "player 1";
   private static final String CAPS_OK = "Player1";
   private static final String NUM_START = "1Player";
   private static final String SPECIAL_CHAR = "Player1!";
   private static final String GOOD_NAME_2 = "player2";
+
 
   /**
    * The component under test.
@@ -38,13 +42,15 @@ public class PlayerTest
 
   // Friendly objects
   private PlayerLobby lobby;
-  private GameManager gameManager;
+  private GameManager manager;
+  private ReplayManager rManager;
 
   @BeforeEach
   public void setup()
   {
     lobby = new PlayerLobby();
-    gameManager = new GameManager(lobby);
+    rManager = new ReplayManager();
+    manager = new GameManager(lobby, rManager);
   }
 
   /**
@@ -94,10 +100,10 @@ public class PlayerTest
     assertFalse(CuT.isInGame());
 
     lobby.challenge(GOOD_NAME, GOOD_NAME_2);
-    gameManager.startGame(GOOD_NAME_2, GOOD_NAME);
+    manager.startGame(GOOD_NAME_2, GOOD_NAME);
 
     // Get the updated CuT.
-    CuT = gameManager.getOpponent(GOOD_NAME_2);
+    CuT = manager.getOpponent(GOOD_NAME_2);
 
     assertTrue(CuT.isInGame());
   }
@@ -119,11 +125,12 @@ public class PlayerTest
    * Tests that the correct type of result is given when the username has no
    * number.
    */
+
   @Test
   public void no_Num()
   {
     CuT = new Player(lobby);
-    assertEquals(UsernameResult.INVALID, CuT.isValidUsername(NO_NUM));
+    assertEquals(UsernameResult.AVAILABLE, CuT.isValidUsername(NO_NUM));
   }
 
   /**
@@ -137,6 +144,14 @@ public class PlayerTest
   }
 
   /**
+   * Tests if having a space in the username is valid
+   */
+  @Test
+  public void contains_Space(){
+    CuT = new Player(lobby);
+    assertEquals(UsernameResult.AVAILABLE, CuT.isValidUsername(CONTAINS_SPACE));
+  }
+  /**
    * Tests that the correct type of result is given when the username is too
    * long (>25 chars).
    */
@@ -145,17 +160,6 @@ public class PlayerTest
   {
     CuT = new Player(lobby);
     assertEquals(UsernameResult.INVALID, CuT.isValidUsername(TOO_LONG));
-  }
-
-  /**
-   * Tests that the correct type of result is given when the username
-   * contains a white space (which is an illegal character)
-   */
-  @Test
-  public void has_Space()
-  {
-    CuT = new Player(lobby);
-    assertEquals(UsernameResult.INVALID, CuT.isValidUsername(HAS_SPACE));
   }
 
   /**
@@ -177,16 +181,53 @@ public class PlayerTest
   public void num_Start()
   {
     CuT = new Player(lobby);
-    assertEquals(UsernameResult.INVALID, CuT.isValidUsername(NUM_START));
+    //assertEquals(UsernameResult.INVALID, CuT.isValidUsername(NUM_START));
   }
 
   /**
    * When a special character is present the result should be invalid.
    */
+
   @Test
   public void special_Char()
   {
     CuT = new Player(lobby);
     assertEquals(UsernameResult.INVALID, CuT.isValidUsername(SPECIAL_CHAR));
+  }
+
+  /**
+   * tests the win percentages for session
+   */
+
+  @Test
+  public void win_percentage(){
+    CuT = new Player(lobby);
+    CuT.setUsername("player1");
+    lobby.newPlayer(CuT);
+
+    CuT.endGame(true);
+    CuT.endGame(false);
+
+    assertEquals(50, CuT.getWinPercentage());
+  }
+
+  /**
+   * test win percentage for no games played yet
+   */
+  @Test
+  public void win_percentage_no_games_played(){
+    CuT = new Player(lobby);
+    assertEquals(0, CuT.getWinPercentage());
+  }
+
+  /**
+   * tests the ending of a game
+   */
+  @Test
+  public void endGameTest(){
+    CuT = new Player(lobby);
+    CuT.endGame(true);
+
+    assertEquals(100, CuT.getWinPercentage());
   }
 }

@@ -5,6 +5,7 @@ import com.webcheckers.application.GameManager;
 import com.webcheckers.model.CheckerGame;
 import com.webcheckers.model.Move;
 import com.webcheckers.model.Player;
+import com.webcheckers.model.Space;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -29,7 +30,7 @@ public class PostBackupMoveRoute implements Route
   private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
   @Override
-  public Object handle(Request request, Response response)
+  public synchronized Object handle(Request request, Response response)
   {
     LOG.config("PostBackupMoveRoute invoked");
     final Session session = request.session();
@@ -40,11 +41,10 @@ public class PostBackupMoveRoute implements Route
     {
       String username = player.getUsername();
       int gameID = manager.getGameID(username);
-      CheckerGame game = manager.getGame(gameID);
+      CheckerGame game = manager.getLocalGame(player.getUsername());
       if (game == null)
       {
         response.redirect(WebServer.HOME_URL);
-        halt();
         return "Redirected Home";
       }
       CheckerGame localGame = manager.makeClientSideGame(gameID, LOCAL_ID);
@@ -56,11 +56,18 @@ public class PostBackupMoveRoute implements Route
       {
         for (int i = 0; i < moves.size() - 1; i++)
         {
+          Move move = moves.get(i);
+          Space start =
+                  localGame.getBoard().getSpaceAt(move.getStart().getRow(),
+                          move.getStart().getCell());
+          Space end = localGame.getBoard().getSpaceAt(move.getEnd().getRow(),
+                  move.getEnd().getCell());
+          move.validateMove(localGame, start, end);
           localGame.makeMove(moves.get(i));
         }
         moves.remove(moves.get(moves.size() - 1));
         session.attribute(PostValidateMoveRoute.MOVE_LIST_ID, moves);
-        manager.makeClientSideGame(gameID, username);
+        manager.updateLocalGame(username, localGame);
         manager.removeClientSideGame(LOCAL_ID);
         return gson.toJson(info("Backed up to last valid move"));
       }

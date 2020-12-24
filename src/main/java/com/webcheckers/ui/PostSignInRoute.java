@@ -7,7 +7,6 @@ import spark.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import static spark.Spark.halt;
@@ -15,10 +14,10 @@ import static spark.Spark.halt;
 /**
  * UI controller to POST a sign in
  *
- * @author: Mikayla Wishart 'mcw7246'
+ * @author Mikayla Wishart 'mcw7246'
  **/
 
-public class PostSignInRoute implements Route
+public class  PostSignInRoute implements Route
 {
 
 
@@ -35,7 +34,6 @@ public class PostSignInRoute implements Route
   //
   // Attributes
   //
-  private Player player;
   private PlayerLobby playerLobby;
 
 
@@ -74,7 +72,7 @@ public class PostSignInRoute implements Route
     if (session.attribute(GetHomeRoute.PLAYER_KEY) == null)
     {
       final String username = request.queryParams(USERNAME_PARAM);
-      ModelAndView mv;
+      ModelAndView mv = null;
       Player player = new Player(playerLobby);
 
       //goes through the cases and submits the correct message/response
@@ -89,8 +87,7 @@ public class PostSignInRoute implements Route
         case AVAILABLE:
           session.attribute(GetHomeRoute.PLAYER_KEY, player);
           available(response);
-        default:
-          throw new NoSuchElementException("Invalid result of username received.");
+          halt();
       }
 
       return templateEngine.render(mv);
@@ -118,6 +115,5 @@ public class PostSignInRoute implements Route
   private void available(Response response)
   {
     response.redirect(WebServer.HOME_URL);
-    halt();
   }
 }

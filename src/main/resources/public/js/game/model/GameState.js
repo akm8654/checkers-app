@@ -18,6 +18,10 @@ define(function(require){
 
     // public (internal) methods
 
+    this.getTheme = function getTheme() {
+      return BrowserUtils.getParameterByName('theme');
+    }
+
     /**
      * Get the unique ID of this game.
      */

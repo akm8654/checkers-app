@@ -2,19 +2,19 @@ package com.webcheckers.ui;
 
 import com.google.gson.Gson;
 import com.webcheckers.application.GameManager;
-import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.*;
-import spark.*;
+import spark.Request;
+import spark.Response;
+import spark.Route;
+import spark.Session;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 import static com.webcheckers.util.Message.error;
 import static com.webcheckers.util.Message.info;
 import static java.lang.Math.abs;
-import static spark.Spark.halt;
 
 /**
  * This action submits a single move for validation. The server must keep
@@ -30,7 +30,6 @@ public class PostValidateMoveRoute implements Route
 {
   private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
 
-  private GameManager manager;
   Gson gson = new Gson();
   public static final String ACTION_DATA = "actionData";
   public static final String MOVE_LIST_ID = "moves";
@@ -80,7 +79,7 @@ public class PostValidateMoveRoute implements Route
 
       Board gameBoard = localGame.getBoard();
       //Creates a log of the board.
-      LOG.config("Validating move from board:\n" + gson.toJson(gameBoard));
+      //LOG.config("Validating move from board:\n" + gson.toJson(gameBoard));
       int startCell = abs(move.getStart().getCell());
       int endCell = abs(move.getEnd().getCell());
       Space startSpace = gameBoard.getSpaceAt(move.getStart().getRow(), startCell);

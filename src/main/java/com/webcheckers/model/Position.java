@@ -3,6 +3,8 @@ package com.webcheckers.model;
 
 /**
  * Holds the position of a piece.
+ *
+ * @author Austin Miller 'akm8654'
  */
 public class Position
 {

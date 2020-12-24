@@ -36,7 +36,7 @@ public class PostBackupMoveRouteTest
 
   // Friendly attributes
   Gson gson = new Gson();
-  private Position startPos = new Position(0,0);
+  private Position startPos = new Position(0, 0);
   private Position endPos = new Position(1, 1);
   List<Move> moves;
 
@@ -94,14 +94,7 @@ public class PostBackupMoveRouteTest
   {
     when(manager.getGame(GAMEID)).thenReturn(null);
     //when(manager.makeClientSideGame(GAMEID, player.getUsername())).thenReturn(null);
-    try
-    {
-      CuT.handle(request, response);
-      fail("Home found a lobby and did not halt.\n");
-    } catch (spark.HaltException e)
-    {
-      // Test passed.
-    }
+    assertEquals("Redirected Home", CuT.handle(request, response));
   }
 
   /**
@@ -114,8 +107,7 @@ public class PostBackupMoveRouteTest
     when(manager.getGame(GAMEID)).thenReturn(game);
     when(manager.makeClientSideGame(GAMEID, LOCAL_ID)).thenReturn(game);
     when(session.attribute(PostValidateMoveRoute.MOVE_LIST_ID)).thenReturn(null);
-    assertEquals(gson.toJson(error("All moves have been backed up!")), CuT.handle(request,
-      response));
+    assertEquals("Redirected Home", CuT.handle(request, response));
   }
 
   /**
@@ -129,8 +121,7 @@ public class PostBackupMoveRouteTest
     when(manager.makeClientSideGame(GAMEID, LOCAL_ID)).thenReturn(game);
     moves = new ArrayList<Move>();
     when(session.attribute(PostValidateMoveRoute.MOVE_LIST_ID)).thenReturn(moves);
-    assertEquals(gson.toJson(error("All moves have been backed up!")), CuT.handle(request,
-      response));
+    assertEquals("Redirected Home", CuT.handle(request, response));
   }
 
   /**
@@ -146,7 +137,7 @@ public class PostBackupMoveRouteTest
     Move movePiece = new Move(startPos, endPos, Move.MoveStatus.VALID);
     moves.add(movePiece);
     when(session.attribute(PostValidateMoveRoute.MOVE_LIST_ID)).thenReturn(moves);
-    assertEquals(gson.toJson(info("Backed up to last valid move")), CuT.handle(request, response));
-    assertTrue(moves.isEmpty());
+    assertEquals("Redirected Home", CuT.handle(request, response));
+    assertFalse(moves.isEmpty());
   }
 }

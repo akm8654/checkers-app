@@ -33,8 +33,8 @@ public class Move
   /**
    * Constructor to set the style of moves.
    *
-   * @param start the starting position
-   * @param end the ending position
+   * @param start  the starting position
+   * @param end    the ending position
    * @param status the status to set it too.
    */
   public Move(Position start, Position end, MoveStatus status)
@@ -107,7 +107,7 @@ public class Move
     {
       status = MoveStatus.INVALID_SPACE;
     } else if (startSpace.equals(endSpace)) //is the space
-      // the same as the start?
+    // the same as the start?
     {
       status = MoveStatus.SAME_SPACE;
     } else
@@ -136,6 +136,7 @@ public class Move
           {
             status = MoveStatus.JUMP;
             game.addJumpedPieces(jumpSpace);
+            this.regStatus = status;
             return status;
           } else if (colorFactor * rowDiff > 0)
           {
@@ -161,6 +162,35 @@ public class Move
         status = game.hasMoved() ? MoveStatus.ALREADY_MOVED : MoveStatus.VALID;
       }
     }
+    this.regStatus = status;
     return status;
+  }
+
+  /**
+   * Used to determine if a moves is the same as another
+   *
+   * @param o the object to check against
+   * @return true if equal, false otherwise
+   */
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o)
+    {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass())
+    {
+      return false;
+    }
+    Move move = (Move) o;
+    return (move.start.equals(this.start) && move.end.equals(this.end));
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return this.start.getCell() * 100 + this.start.getRow() * 1000 +
+            this.end.getRow() * 10 + this.end.getCell();
   }
 }

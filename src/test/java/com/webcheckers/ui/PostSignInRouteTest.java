@@ -8,13 +8,15 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import spark.*;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 /**
- * The {@code POST /signin} route handler.
+ * The {@code POST /SignIn} route handler.
  *
  * @author Mikayla Wishart 'mcw7246'
  */
@@ -23,8 +25,9 @@ public class PostSignInRouteTest
 {
   public static final String INVALID_USERNAME_SHORT = "name1";
   public static final String INVALID_USERNAME_LONG = "abcdefghijklmnopqrstuvwxyz123";
-  public static final String AVAILABLE_USERNAME = "username1";
   public static final String TAKEN_USERNAME = "username2";
+  public static final String SIGN_IN_ERROR = "%s is already taken. Please try " +
+    "another username.";
 
   /*
    *The component-under-test (CuT)
@@ -36,14 +39,18 @@ public class PostSignInRouteTest
    */
   private Player player;
   private PlayerLobby playerLobby;
+
   /*
    *mock objects
    */
-
   private Request request;
   private Session session;
   private TemplateEngine engine;
   private Response response;
+
+  /**
+   * Setup mock calls and associations needed for each test.
+   */
   @BeforeEach
   public void setup()
   {
@@ -57,10 +64,12 @@ public class PostSignInRouteTest
 
 
 
-    CuT = new PostSignInRoute(engine,playerLobby);
+    CuT = new PostSignInRoute(engine, playerLobby);
   }
-  //TODO fix the errors in the tests
 
+  /**
+   * Ensure that a username which is too short is rejected.
+   */
   @Test
   public void testInvalid_username_short(){
     when(request.queryParams(eq(PostSignInRoute.USERNAME_PARAM))).thenReturn(INVALID_USERNAME_SHORT);
@@ -75,12 +84,13 @@ public class PostSignInRouteTest
 
     testHelper.assertViewModelAttribute(GetHomeRoute.TITLE_ATTR, GetHomeRoute.TITLE);
     assertNotNull(PostSignInRoute.MESSAGE_ATTR);
-    //testHelper.assertViewModelAttribute(PostSignInRoute.MESSAGE_ATTR, null)
-    ;
 
     testHelper.assertViewName(PostSignInRoute.VIEW_NAME);
   }
 
+  /**
+   * Ensure that a username which is too long is rejected.
+   */
   @Test
   public void testInvalid_username_long(){
     when(request.queryParams(eq(PostSignInRoute.USERNAME_PARAM))).thenReturn(INVALID_USERNAME_LONG);
@@ -97,41 +107,37 @@ public class PostSignInRouteTest
     testHelper.assertViewModelAttribute(GetHomeRoute.TITLE_ATTR, GetHomeRoute.TITLE);
 
   }
-
-  @Test
-  public void testTaken_username(){
-    when(request.queryParams(eq(PostSignInRoute.USERNAME_PARAM))).thenReturn(TAKEN_USERNAME);
-    final TemplateEngineTest testHelper = new TemplateEngineTest();
-
-   /**try{
-      CuT.handle(request, response);
-      fail("No repeat of username found. Test failed.");
-    }catch (spark.HaltException e){
-      //test npassed
-    }*/
-
-
-    assertNotNull(PostSignInRoute.MESSAGE_ATTR);
-//    assertEquals(player.isValidUsername(TAKEN_USERNAME), Player.UsernameResult.TAKEN);
-
-
-  }
-
+  /**
+   * Ensure that a username which is valid in all regards is accepted.
+   */
   @Test
   public void testAvailable_username(){
     when(request.queryParams(eq(PostSignInRoute.USERNAME_PARAM))).thenReturn("testName1");
 
     final TemplateEngineTest testHelper = new TemplateEngineTest();
-    /**try{
+  }
+
+  /**
+   * Ensure that if the player object is not null, that the user is redirected
+   * to the sign in page.
+   */
+  @Test
+  public void test_redirect_halt()
+  {
+    when(session.attribute(GetHomeRoute.PLAYER_KEY)).thenReturn(player);
+
+    try
+    {
+      when(request.queryParams(eq(PostSignInRoute.USERNAME_PARAM))).thenReturn(null);
+      final TemplateEngineTest testHelper = new TemplateEngineTest();
+      when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
+
       CuT.handle(request, response);
-      fail("The username was somehow invalid");
-    }catch(spark.HaltException e){
-      //passes
+      fail("The player object was null!");
+
+    } catch (HaltException e)
+    {
+      //Test passed
     }
-
-    //when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
-    assertEquals(player.isValidUsername(AVAILABLE_USERNAME), Player.UsernameResult.AVAILABLE);
-
-*/
   }
 }

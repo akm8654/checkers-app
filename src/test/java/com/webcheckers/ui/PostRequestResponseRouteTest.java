@@ -1,26 +1,29 @@
 package com.webcheckers.ui;
 
+import com.webcheckers.application.GameManager;
 import com.webcheckers.application.PlayerLobby;
 import com.webcheckers.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Null;
 import spark.*;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import static com.webcheckers.ui.PostRequestGameRoute.MESSAGE;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.webcheckers.ui.GetHomeRoute.GAME_MANAGER_KEY;
+import static com.webcheckers.ui.PostRequestResponseRoute.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.ArgumentMatchers.any;
 
 /**
  * The unit test for the {@link PostRequestResponseRoute}
  *
  * @author Mario Castano 'mac3186'
+ * @author Austin Miller 'akm8654'
  */
 @Tag("UI-tier")
 public class PostRequestResponseRouteTest
@@ -34,7 +37,7 @@ public class PostRequestResponseRouteTest
 
   /**
    * Mock Object Attributes for testing.
-   *
+   * <p>
    * Direct testing of these is unnecessary in this route's test,
    * but interactions between them must work as expected.
    */
@@ -44,7 +47,7 @@ public class PostRequestResponseRouteTest
   private TemplateEngine engine;
   private Player challengerP1;
   private Player opponentP2;
-
+  private GameManager manager;
 
   /**
    * The Component-Under-Test (CuT).
@@ -55,7 +58,8 @@ public class PostRequestResponseRouteTest
   private PostRequestResponseRoute CuT;
 
   @BeforeEach
-  public void setup() {
+  public void setup()
+  {
     //Mock the initialization step before the route's handler method is used and mock unfriendly interacting classes
     request = mock(Request.class);
     session = mock(Session.class);
@@ -64,7 +68,10 @@ public class PostRequestResponseRouteTest
     response = mock(Response.class);
     challengerP1 = mock(Player.class);
     opponentP2 = mock(Player.class);
+    manager = mock(GameManager.class);
 
+    //initialize the gameManager
+    when(session.attribute(GAME_MANAGER_KEY)).thenReturn(manager);
     //Initialization directly with class is safe because PlayerLobby is friendly
     lobby = new PlayerLobby();
     //Add the players to the lobby
@@ -83,31 +90,24 @@ public class PostRequestResponseRouteTest
   }
 
   /**
-   * Test that when the lobby is empty that it simply redirects to the homepage
+   * Tests that when there is no player that it is redirected home.
    */
   @Test
-  public void home_redirect()
+  public void noPlayer()
   {
-    when(session.attribute(GetHomeRoute.PLAYER_LOBBY_KEY)).thenReturn(null);
-    try
-    {
-      CuT.handle(request, response);
-      fail("Home found a lobby and did not halt.\n");
-    }catch (spark.HaltException e){
-      // Test passed.
-    }
+    when(session.attribute(GetHomeRoute.PLAYER_KEY)).thenReturn(null);
+    assertEquals("Home Redirect", CuT.handle(request, response));
   }
 
   /**
    * Test that when the player responds "yes" to a challenge, that they and their opponent
    * are put into a game, and removed from the available list of challengers.
    */
-
-  /*
   @Test
-  public void opponent_accepts_challenge() {
+  public void opponent_accepts_challenge()
+  {
     when(session.attribute(GetHomeRoute.PLAYER_KEY)).thenReturn(challengerP1);
-    //when(challengerP1.getUsername()).thenReturn(PLAYER1);
+    when(challengerP1.getUsername()).thenReturn(PLAYER1);
     when(request.queryParams(PostRequestResponseRoute.GAME_ACCEPT)).thenReturn("yes");
     when(session.attribute(GetHomeRoute.CHALLENGE_USER_KEY)).thenReturn(PLAYER2);
 
@@ -115,13 +115,11 @@ public class PostRequestResponseRouteTest
     when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
     //Test is invoked
-    CuT.handle(request, response);
+    assertEquals("Game redirect", CuT.handle(request, response));
 
     //Ensure that player acceptance was handled properly
     assertFalse(lobby.getChallengers().contains(PLAYER1));
     assertFalse(lobby.getChallengers().contains(PLAYER2));
-    assertTrue(challengerP1.isInGame());
-    assertTrue(opponentP2.isInGame());
   }
 
 
@@ -129,10 +127,9 @@ public class PostRequestResponseRouteTest
    * Test that when a player declines a challenge, both players are redirected to the homepage,
    * and are able to challenge another open player.
    */
-
-  /*
   @Test
-  public void opponent_declines_challenge() {
+  public void opponent_declines_challenge()
+  {
     when(session.attribute(GetHomeRoute.PLAYER_KEY)).thenReturn(challengerP1);
     when(request.queryParams(PostRequestResponseRoute.GAME_ACCEPT)).thenReturn("no");
     when(session.attribute(GetHomeRoute.CHALLENGE_USER_KEY)).thenReturn(PLAYER2);
@@ -141,13 +138,26 @@ public class PostRequestResponseRouteTest
     when(engine.render(any(ModelAndView.class))).thenAnswer(testHelper.makeAnswer());
 
     //Test is invoked
-    CuT.handle(request, response);
+    assertEquals("Home Redirect", CuT.handle(request, response));
 
     //Ensure that player denial was handled properly
-    assertTrue(lobby.getChallengers().contains(PLAYER1));
-    assertTrue(lobby.getChallengers().contains(PLAYER2));
-    assertFalse(challengerP1.isInGame());
-    assertFalse(opponentP2.isInGame());
+    assertFalse(lobby.getChallengers().contains(PLAYER1));
+    assertFalse(lobby.getChallengers().contains(PLAYER2));
   }
-  */
+
+  @Test
+  public void start_test_games()
+  {
+    when(session.attribute(GetHomeRoute.PLAYER_KEY)).thenReturn(challengerP1);
+    when(request.queryParams(PostRequestResponseRoute.GAME_ACCEPT)).thenReturn("yes");
+    ArrayList<String> game_names = new ArrayList<String>(
+            Arrays.asList(MULTI_KING, REQUIRE_JUMP_, NEC_WHITE, NO_MOVES,
+                    MULTI_JUMP_REQ, ABOUTA_JUMP, ABOUT_NO_MORE_MOVES,
+                    TEST_DEM1, KING_BACK));
+    for (String username : game_names)
+    {
+      when(session.attribute(GetHomeRoute.CHALLENGE_USER_KEY)).thenReturn(username);
+      assertEquals("Game redirect", CuT.handle(request, response));
+    }
+  }
 }

@@ -27,10 +27,28 @@ a web micro-framework.
 4. Start a game and begin playing.
 
 ## Known bugs and disclaimers
-(It may be the case that your implementation is not perfect.)
+1. If you change themes during spectator mode and refresh the page, then
+   a username was not produced in the params and produces a null pointer.
 
-Document any known bug or nuisance.
-If any shortcomings, make clear what these are and where they are located.
+## How to run the demo test boards
+If you challenge a player with one of these names, a game will start with a 
+board with the condition on the right.
+
+Sign in with one of these usernames challenge any other to yield the 
+corresponding test result!
+
+|             Username             |                        Test Board Scenario Generated                       |
+|----------------------------------|----------------------------------------------------------------------------|
+|       TEST MULTI KING JUMP       |                      A king needs to make a multi jump                     |
+|         TEST REQUIRE JUMP        |                      A red piece needs to make a jump                      |
+|       TEST NECESSARY WHITE       |                A white piece needs to make a jump (their turn)             |
+|        TEST NO MORE MOVES	       |              There are no moves available on this board, red won           |
+|      TEST MULTI JUMP REQUIRE     |                         Normal multi-jump required                         |
+|         ABOUT TO JUMP ALL        | The board is set for the red player to win by jumping the last white piece |
+|            TEST DEMO 1           |                        The first board for our demo                        |
+|          ABOUT NO MOVES          |                  There are about to be no more moves left                  |
+|         KING BACK AGAIN          |    The 4 jumps where the king doubles back on itself, but it's allowed     |
+
 
 ## How to test it
 

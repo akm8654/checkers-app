@@ -34,6 +34,10 @@ public class CheckerGame
 
   private boolean moved = false;
 
+  private int numRedPieces, numWhitePieces;
+
+  private int gameID;
+
   /**
    * Constructor
    */
@@ -43,6 +47,7 @@ public class CheckerGame
     this.PLAYER_TWO = PLAYER_TWO;
     this.board = board;
     jumpedPieces = new Stack<Space>();
+    countInitialPieces();
   }
 
   /**
@@ -56,7 +61,29 @@ public class CheckerGame
     this.PLAYER_TWO = original.PLAYER_TWO;
     this.board = new Board(original.board);
     this.turn = original.turn;
+    this.gameID = original.getGameID();
     jumpedPieces = new Stack<Space>();
+    countInitialPieces();
+  }
+
+  /**
+   * Gets the game ID.
+   *
+   * @return the integer gameID.
+   */
+  public int getGameID()
+  {
+    return gameID;
+  }
+
+  /**
+   * Sets the game ID to the specified value.
+   *
+   * @param gameID the game Id to be set to.
+   */
+  public void setGameID(int gameID)
+  {
+    this.gameID = gameID;
   }
 
   /**
@@ -135,6 +162,16 @@ public class CheckerGame
   }
 
   /**
+   * Returns the average of the players who are playing.
+   *
+   * @return the average of the two.
+   */
+  public double winningAverage()
+  {
+    return (PLAYER_ONE.getWinPercentage() + PLAYER_TWO.getWinPercentage())/2;
+  }
+
+  /**
    * Gets the actual board (not just the view)
    *
    * @return the board.
@@ -153,10 +190,46 @@ public class CheckerGame
   {
     try
     {
-        return jumpedPieces.pop();
-    }catch(EmptyStackException ese) {
-      System.err.println("(CheckerGame.java) Stack empty");
+        Space sp = jumpedPieces.pop();
+        Piece piece = sp.getPiece();
+        if(piece.getColor().equals(Piece.Color.RED))
+        {
+          numRedPieces--;
+        }
+        else if(piece.getColor().equals(Piece.Color.WHITE))
+        {
+          numWhitePieces--;
+        }
+        return sp;
+    }catch(EmptyStackException | NullPointerException ese) {
       return null;
+    }
+  }
+
+  private void countInitialPieces()
+  {
+    numRedPieces = 0;
+    numWhitePieces = 0;
+
+    for(Row r : board)
+    {
+      for(Space s : r)
+      {
+        if(s.isValidSpace())
+        {
+          if(s.getPiece() != null)
+          {
+            if(s.getPiece().getColor().equals(Piece.Color.RED))
+            {
+              numRedPieces++;
+            }
+            else if(s.getPiece().getColor().equals(Piece.Color.WHITE))
+            {
+              numWhitePieces++;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -170,4 +243,13 @@ public class CheckerGame
     this.moved = moved;
   }
 
+  public int getNumRedPieces()
+  {
+    return numRedPieces;
+  }
+
+  public int getNumWhitePieces()
+  {
+    return numWhitePieces;
+  }
 }

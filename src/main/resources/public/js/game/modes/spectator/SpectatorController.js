@@ -86,10 +86,10 @@ define(function(require){
    * Backup a single move.  This message has state-specific behavior.
    */
   SpectatorController.prototype.exitGame = function exitGame() {
-    window.location = '/spectator/stopWatching?gameID=' + this.getGameID();
-  };
+  window.location = '/spectator/stopWatching?gameID=' + this.getGameID();
+};
 
-  // export class constructor
-  return SpectatorController;
-  
+// export class constructor
+return SpectatorController;
+
 });

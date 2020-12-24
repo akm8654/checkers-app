@@ -2,6 +2,13 @@ package com.webcheckers.model;
 
 import java.util.*;
 
+/**
+ * Determines whether a move is required or not, mostly produces methods but
+ * stores some values to value again quickly.
+ *
+ * @author Austin Miller 'akm8654'
+ * @author Mikayla Wishart 'mcw7246'
+ */
 public class RequireMove
 {
   private final Board board;
@@ -63,6 +70,11 @@ public class RequireMove
     return moves;
   }
 
+  /**
+   * Changes the color for the RequireMove object
+   *
+   * @param color the color to change to.
+   */
   public void updateColor(Piece.Color color)
   {
     this.color = color;
@@ -72,6 +84,12 @@ public class RequireMove
   // key, all the possible regular moves are stored as another.
   public Map<Move.MoveStatus, List<Move>> validMoves;
 
+  /**
+   * Returns a map of all the valid moves that exist on the board
+   *
+   * @return a map where the status is the key and a list of moves that fall
+   * under that type on the board exist.
+   */
   public Map<Move.MoveStatus, List<Move>> getAllMoves()
   {
     //reset the current hashmap of valid moves (in case something went wrong)
@@ -129,10 +147,6 @@ public class RequireMove
     } else
     {
       int colorFactor = -1;
-      if (piece.getColor() == Piece.Color.WHITE)
-      {
-        colorFactor = -1;
-      }
       moves = addMovesRowOneDirection(moves, board, piece, space, colorFactor);
       boolean king = piece.getType().equals(Piece.Type.KING);
       if (king)

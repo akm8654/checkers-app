@@ -9,23 +9,23 @@ import spark.Response;
 import spark.Route;
 import spark.Session;
 
-import java.util.logging.Logger;
-
 import static com.webcheckers.util.Message.info;
 import static spark.Spark.halt;
 
+/**
+ * A route that checks who's turn it is during the game
+ *
+ * @author Austin Miller 'akm8654'
+ */
 public class PostCheckTurnRoute implements Route
 {
-
-  private static final Logger LOG = Logger.getLogger(GetHomeRoute.class.getName());
-
   @Override
   public Object handle(Request request, Response response)
   {
     final Session httpSession = request.session();
     final Player player = httpSession.attribute(GetHomeRoute.PLAYER_KEY);
     final Gson gson = new Gson();
-    //Possible to do: add protection against null game manager
+
     if (player != null)
     {
       GameManager manager = httpSession.attribute(GetHomeRoute.GAME_MANAGER_KEY);

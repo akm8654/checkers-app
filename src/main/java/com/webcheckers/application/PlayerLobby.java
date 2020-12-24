@@ -13,7 +13,7 @@ import java.util.*;
 public class PlayerLobby
 {
 
-  ;
+
 
   // Attributes
   //Player Hashmap where the username is the key.
@@ -45,7 +45,7 @@ public class PlayerLobby
    */
   public boolean challenge(String victim, String challenger)
   {
-    if (challenges.containsKey(victim))
+    if (challenges.containsKey(victim) || challengers.contains(victim))
     {
       return false;
     } else
@@ -119,6 +119,17 @@ public class PlayerLobby
   public synchronized Map<String, Player> getPlayers()
   {
     return players;
+  }
+
+  /**
+   * public function to remove a player for sign out
+   *
+   * @param player -> player to be removed
+   */
+  public synchronized void removePlayer(Player player)
+  {
+    if(player != null)
+    players.remove(player.getUsername());
   }
 
 }

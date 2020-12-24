@@ -14,6 +14,26 @@
    100% {background-color: rgba(255, 192, 203, 0.4);}
 }
 
+:root{
+  --controls-border : #6ECCFF;
+  --controls-background : #CAECFF;
+  --red-url : url("../img/single-piece-red.svg");
+  --white-url : url("../img/single-piece-white.svg");
+  --red-king-url : url("../img/king-piece-red.svg");
+  --white-king-url : url("../img/king-piece-white.svg");
+  --board-url : url("../img/chess_board.svg");
+}
+
+:root[theme='pink']{
+  --controls-border: #f787ff;
+  --controls-background : #f2caff;
+  --red-url : url("../img/duck/single-piece-red-duck.svg");
+  --white-url : url("../img/duck/single-piece-white-duck.svg");
+  --red-king-url : url("../img/duck/king-piece-red-duck.svg");
+  --white-king-url : url("../img/duck/king-piece-white-duck.svg");
+  --board-url : url("../img/duck/chess_board_pink.svg");
+}
+
 /*
 * Generic Game Controls style
 */
@@ -27,11 +47,11 @@ div#game-controls fieldset {
   flex: 1; /* same width */
   margin: 1em;
   border-radius: 5px;
-  border: 2px solid #6ECCFF;
+  border: 2px solid var(--controls-border);
 }
 div#game-controls fieldset legend {
   padding: 0 0.75em 0 0.75em;
-  color: #6ECCFF;
+  color: var(--controls-border);
   font-size: larger;
 }
 
@@ -65,8 +85,8 @@ fieldset#game-toolbar button {
   margin-right: 0.25em;
   font-size: larger;
   cursor: pointer;
-  background-color: #CAECFF;
-  border-color: #6ECCFF;
+  background-color: var(--controls-background);
+  border-color: var(--controls-border);
   border-radius: 7px;
 }
 fieldset#game-toolbar button:disabled {
@@ -87,7 +107,7 @@ table#game-board {
   width: 690px;
   height: 690px;
   border-collapse: collapse;
-  background-image: url("../img/chess_board.svg");
+  background-image: var(--board-url);
   background-repeat: no-repeat;
 }
 table#game-board > tbody {
@@ -108,16 +128,16 @@ table#game-board td > div {
   background-size: contain;
 }
 table#game-board td > div[data-type="SINGLE"][data-color="RED"] {
-  background-image: url("../img/single-piece-red.svg");
+  background-image: var(--red-url);
 }
 table#game-board td > div[data-type="KING"][data-color="RED"] {
-  background-image: url("../img/king-piece-red.svg");
+  background-image: var(--red-king-url)
 }
 table#game-board td > div[data-type="SINGLE"][data-color="WHITE"] {
-  background-image: url("../img/single-piece-white.svg");
+  background-image: var(--white-url);
 }
 table#game-board td > div[data-type="KING"][data-color="WHITE"] {
-  background-image: url("../img/king-piece-white.svg");
+  background-image: var(--white-king-url);
 }
 table#game-board td.pending {
   animation: background-fades;

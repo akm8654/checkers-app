@@ -30,10 +30,14 @@ public class GameManager
   private static PlayerLobby playerLobby;
   private static Map<String, Integer> spectators = new HashMap<>();
   private static Map<Integer, Integer> spectatorNum = new HashMap<>();
+  private static Map<Integer, String> gameOver = new HashMap<>();
+  private static Set<Integer> activeGames = new HashSet<>();
+  private final ReplayManager rManager;
 
-  public GameManager(PlayerLobby lobby)
+  public GameManager(PlayerLobby lobby, ReplayManager rManager)
   {
     playerLobby = lobby;
+    this.rManager = rManager;
   }
 
   public Set<String> getInGame()
@@ -65,7 +69,78 @@ public class GameManager
     HashMap<String, String> pairToAdd = new HashMap<>();
     pairToAdd.put(challenger, victim);
     this.pairs.put(gameIDNum, pairToAdd);
-    games.put(gameIDNum, new CheckerGame(player1, player2, new Board()));
+    CheckerGame game = new CheckerGame(player1, player2, new Board());
+    game.setGameID(gameIDNum);
+    games.put(gameIDNum, game);
+    gameOver.put(gameIDNum, "No");
+    activeGames.add(gameIDNum);
+    rManager.addMove(gameIDNum, game);
+  }
+
+  /**
+   * Determines if the username is a spectator or not.
+   *
+   * @param username the username to check
+   * @return true if it is a spectator or not.
+   */
+  public boolean isSpectator(String username)
+  {
+    return spectators.containsKey(username);
+  }
+
+  /**
+   * A function used to end the game in the player lobby.
+   *
+   * @param gameIDNum the gameID to end.
+   */
+  public void endGame(int gameIDNum)
+  {
+    Map<String, String> pair = pairs.get(gameIDNum);
+    Player player1 =
+            playerLobby.getPlayers().get(pair.keySet().toArray()[0]);
+    Player player2 = playerLobby.getPlayers().get(pair.values().toArray()[0]);
+    if (player1 != null)
+    {
+      String challenger = player1.getUsername();
+      inGame.remove(challenger);
+      removeClientSideGame(challenger);
+    }
+    if (player2 != null)
+    {
+      String victim = player2.getUsername();
+      inGame.remove(victim);
+      removeClientSideGame(victim);
+    }
+
+    spectatorNum.remove(gameIDNum);
+    activeGames.remove(gameIDNum);
+  }
+
+  public void removeFromGame(String username)
+  {
+    gameID.remove(username);
+  }
+
+  /**
+   * Sets the game over state.
+   *
+   * @param gameIDNum the id number to change
+   * @param status the status to set it to.
+   */
+  public void setGameOver(int gameIDNum, String status)
+  {
+    gameOver.replace(gameIDNum, status);
+  }
+
+  /**
+   * Returns the status of the game over status.
+   *
+   * @param gameIDNum the game to get
+   * @return the status of the game.
+   */
+  public String getGameOverStatus(int gameIDNum)
+  {
+    return gameOver.get(gameIDNum);
   }
 
   /**
@@ -77,9 +152,12 @@ public class GameManager
    */
   public void addSpectator(String username, int gameId)
   {
-    spectators.put(username, gameId);
-    int viewers = spectatorNum.get(gameId);
-    spectatorNum.put(gameId, viewers+1);
+    if(!spectators.containsKey(username))
+    {
+      spectators.put(username, gameId);
+      int viewers = spectatorNum.get(gameId);
+      spectatorNum.put(gameId, viewers + 1);
+    }
   }
 
   /**
@@ -90,7 +168,13 @@ public class GameManager
    */
   public int getViewers(int gameID)
   {
-    return spectatorNum.get(gameID);
+    if(spectatorNum.get(gameID) != null)
+    {
+      return spectatorNum.get(gameID);
+    } else
+    {
+      return 0;
+    }
   }
 
   /**
@@ -146,7 +230,10 @@ public class GameManager
     {
       game.updateTurn();
     }
+    game.setGameID(gameIDNum);
     games.put(gameIDNum, game);
+    gameOver.put(gameIDNum, "No");
+    activeGames.add(gameIDNum);
   }
 
   /**
@@ -156,7 +243,11 @@ public class GameManager
    */
   public List<CheckerGame> getGames()
   {
-    return new ArrayList<>(games.values());
+    List<CheckerGame> gameArrayList = new ArrayList<>();
+    for(int gameID : activeGames){
+      gameArrayList.add(games.get(gameID));
+    }
+    return gameArrayList;
   }
 
   /**
@@ -170,10 +261,7 @@ public class GameManager
     if(gameID.containsKey(username))
     {
       return gameID.get(username);
-    } else
-    {
-      return spectators.get(username);
-    }
+    } else return spectators.getOrDefault(username, -1);
   }
 
   /**
@@ -225,6 +313,17 @@ public class GameManager
   public CheckerGame getLocalGame(String username)
   {
     return clientSideGames.get(username);
+  }
+
+  /**
+   * Updates the local game
+   *
+   * @param username the username to change
+   * @param game the game to be changed to.
+   */
+  public void updateLocalGame(String username, CheckerGame game)
+  {
+    clientSideGames.replace(username, game);
   }
 
   /**

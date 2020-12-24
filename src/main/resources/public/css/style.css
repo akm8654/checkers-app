@@ -1,15 +1,49 @@
+:root{
+  --main-hue : #CAECFF;
+  --link : #2677FF;
+  --hover : #333;
+  --border : #BFE6FF;
+  --button-background : #1057FF;
+  --button-border : #073BFF;
+  --page-border : #6ECCFF;
+  --error-background : #FAE4E4;
+  --player-button : #f1f1f1;
+  --button-game : #fff1f1;
+  --error-border : #DD6F6F;
+  --shadow : #2477FF;
+  --page-background : #DEE9FF;
+  --text-border : #ccc;
+}
+
+:root[theme='pink']{
+  --main-hue : #ffcaf4;
+  --link : #ff26cc;
+  --hover : #333;
+  --border : #febfff;
+  --button-background : #e368d9;
+  --button-border : #8a5c86;
+  --page-border : #ffb0fb;
+  --error-background : #ffd1d1;
+  --player-button : #f1f1f1;
+  --button-game : #fff1f1;
+  --error-border : #ff7575;
+  --shadow : #f824ff;
+  --page-background : #f7deff;
+  --text-border : #ccaab0;
+}
+
 body {
-  background: #CAECFF;
+  background: var(--main-hue);
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
 }
 
 a {
-  color: #2677FF;
+  color: var(--link);
 }
 
 a:hover {
-  color: #333;
+  color: var(--hover);
 }
 
 a[disabled] {
@@ -24,18 +58,18 @@ form#signout {
 input[type="text"],
 input[type="password"] {
   background: white;
-  border: 1px solid #BFE6FF;
+  border: 1px solid var(--border);
   padding: 2px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
-  color: #1057FF;
+  color: var(--button-background);
 }
 
 input[type="submit"] {
-  background: #1057FF;
-  border: 1px solid #073BFF;
+  background: var(--button-background);
+  border: 1px solid var(--button-border);
   padding: 1px 3px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
@@ -46,8 +80,8 @@ input[type="submit"] {
 }
 
 button[type="submit"] {
-  background: #1057FF;
-  border: 1px solid #073BFF;
+  background: var(--button-background);
+  border: 1px solid var(--button-border);
   padding: 1px 3px;
   font-family: 'Trebuchet MS', sans-serif;
   font-size: 14px;
@@ -59,25 +93,25 @@ button[type="submit"] {
 
 div.page {
   background: white;
-  border: 1px solid #6ECCFF;
+  border: 1px solid var(--page-border);
   width: 710px;
   margin: 30px auto;
 }
 
 div.page h1 {
-  background: #6ECCFF;
+  background: var(--page-border);
   margin: 0;
   padding: 10px 14px;
   color: white;
   letter-spacing: 1px;
-  text-shadow: 0 0 3px #2477FF;
+  text-shadow: 0 0 3px var(--shadow);
   font-weight: normal;
 }
 
 div.page div.navigation {
-  background: #DEE9FF;
+  background: var(--page-background);
   padding: 4px 10px;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--text-border);
   border-bottom: 1px solid #eee;
   color: #888;
   font-size: 12px;
@@ -91,8 +125,8 @@ div.page div.navigation a {
 
 div.page h2 {
   margin: 0.5em 0 0.25em 0;
-  color: #1057FF;
-  text-shadow: 0 1px 2px #ccc;
+  color: var(--button-background);
+  text-shadow: 0 1px 2px var(--text-border);
 }
 
 div.page div.body {
@@ -111,8 +145,8 @@ div.page div.footer {
  */
 div.ERROR {
   margin: 10px 0;
-  background: #FAE4E4;
-  border: 1px solid #DD6F6F;
+  background: var(--error-background);
+  border: 1px solid var(--error-border);
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   padding: 4px;
@@ -124,9 +158,9 @@ div.ERROR {
  */
 div.INFO {
   margin: 10px 0;
-  background: #CAECFF;
+  background: var(--main-hue);
   filter: brightness(115%);
-  border: 1px solid #6ECCFF;
+  border: 1px solid var(--page-border);
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
   padding: 4px;
@@ -138,12 +172,12 @@ div.INFO {
   flex-flow: row wrap;
 }
 button.player {
-  background-color: #f1f1f1;
+  background-color: var(--player-button);
   width: 100px;
   margin: 10px;
 }
 button.game {
-  background-color: #fff1f1;
+  background-color: var(--button-game);
   width: 100px;
   margin: 10px;
 }
