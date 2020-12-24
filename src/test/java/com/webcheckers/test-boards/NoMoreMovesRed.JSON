@@ -1,0 +1,384 @@
+{
+  "board": [
+    {
+      "squares": [
+        {
+          "isBlack": false,
+          "columnIndex": 0,
+          "rowIndex": 0
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 1,
+          "rowIndex": 0
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 2,
+          "rowIndex": 0
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 3,
+          "rowIndex": 0,
+          "piece": {
+            "color": "WHITE",
+            "type": "KING"
+          }
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 4,
+          "rowIndex": 0
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 5,
+          "rowIndex": 0
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 6,
+          "rowIndex": 0
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 7,
+          "rowIndex": 0
+        }
+      ],
+      "index": 0
+    },
+    {
+      "squares": [
+        {
+          "isBlack": true,
+          "columnIndex": 0,
+          "rowIndex": 1
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 1,
+          "rowIndex": 1
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 2,
+          "rowIndex": 1
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 3,
+          "rowIndex": 1
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 4,
+          "rowIndex": 1
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 5,
+          "rowIndex": 1
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 6,
+          "rowIndex": 1,
+          "piece": {
+            "color": "WHITE",
+            "type": "KING"
+          }
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 7,
+          "rowIndex": 1
+        }
+      ],
+      "index": 1
+    },
+    {
+      "squares": [
+        {
+          "isBlack": false,
+          "columnIndex": 0,
+          "rowIndex": 2
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 1,
+          "rowIndex": 2
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 2,
+          "rowIndex": 2
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 3,
+          "rowIndex": 2
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 4,
+          "rowIndex": 2
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 5,
+          "rowIndex": 2
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 6,
+          "rowIndex": 2
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 7,
+          "rowIndex": 2
+        }
+      ],
+      "index": 2
+    },
+    {
+      "squares": [
+        {
+          "isBlack": true,
+          "columnIndex": 0,
+          "rowIndex": 3
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 1,
+          "rowIndex": 3
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 2,
+          "rowIndex": 3
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 3,
+          "rowIndex": 3
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 4,
+          "rowIndex": 3,
+          "piece": {
+            "color": "WHITE",
+            "type": "SINGLE"
+          }
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 5,
+          "rowIndex": 3
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 6,
+          "rowIndex": 3
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 7,
+          "rowIndex": 3
+        }
+      ],
+      "index": 3
+    },
+    {
+      "squares": [
+        {
+          "isBlack": false,
+          "columnIndex": 0,
+          "rowIndex": 4
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 1,
+          "rowIndex": 4,
+          "piece": {
+            "color": "WHITE",
+            "type": "SINGLE"
+          }
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 2,
+          "rowIndex": 4
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 3,
+          "rowIndex": 4
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 4,
+          "rowIndex": 4
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 5,
+          "rowIndex": 4
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 6,
+          "rowIndex": 4
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 7,
+          "rowIndex": 4
+        }
+      ],
+      "index": 4
+    },
+    {
+      "squares": [
+        {
+          "isBlack": true,
+          "columnIndex": 0,
+          "rowIndex": 5
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 1,
+          "rowIndex": 5
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 2,
+          "rowIndex": 5
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 3,
+          "rowIndex": 5
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 4,
+          "rowIndex": 5
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 5,
+          "rowIndex": 5
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 6,
+          "rowIndex": 5
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 7,
+          "rowIndex": 5
+        }
+      ],
+      "index": 5
+    },
+    {
+      "squares": [
+        {
+          "isBlack": false,
+          "columnIndex": 0,
+          "rowIndex": 6
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 1,
+          "rowIndex": 6
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 2,
+          "rowIndex": 6
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 3,
+          "rowIndex": 6
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 4,
+          "rowIndex": 6
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 5,
+          "rowIndex": 6
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 6,
+          "rowIndex": 6
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 7,
+          "rowIndex": 6
+        }
+      ],
+      "index": 6
+    },
+    {
+      "squares": [
+        {
+          "isBlack": true,
+          "columnIndex": 0,
+          "rowIndex": 7,
+          "piece": {
+            "color": "WHITE",
+            "type": "SINGLE"
+          }
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 1,
+          "rowIndex": 7
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 2,
+          "rowIndex": 7
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 3,
+          "rowIndex": 7
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 4,
+          "rowIndex": 7
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 5,
+          "rowIndex": 7
+        },
+        {
+          "isBlack": true,
+          "columnIndex": 6,
+          "rowIndex": 7
+        },
+        {
+          "isBlack": false,
+          "columnIndex": 7,
+          "rowIndex": 7
+        }
+      ],
+      "index": 7
+    }
+  ]
+}
